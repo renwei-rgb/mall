@@ -2,7 +2,7 @@ server:
   port: 9103
 spring:
   application:
-    name: @artifactId@
+   name: ${project.artifactId}
   config:
     import:
       - nacos:application.${spring.cloud.nacos.config.file-extension}?refreshEnabled=true
@@ -10,13 +10,17 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: ${NACOS_HOST:192.168.1.46}:${NACOS_PORT:8848}
+        server-addr: ${NACOS_HOST:192.168.3.13}:${NACOS_PORT:8848}
         username: nacos
         password: nacos
+        namespace:   # 添加这一行，如 example-namespace 或留空 ""
       config:
         server-addr: ${spring.cloud.nacos.discovery.server-addr}
         file-extension: yml
         username: ${spring.cloud.nacos.discovery.username}
         password: ${spring.cloud.nacos.discovery.password}
+
+
+
 
 
