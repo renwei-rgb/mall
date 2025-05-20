@@ -1,0 +1,195 @@
+version: '3'
+services:
+  # 基础设施服务
+  nacos:
+    image: nacos/nacos-server:2.0.3
+    container_name: mall4cloud-nacos
+    environment:
+      - MODE=standalone
+      - SPRING_DATASOURCE_PLATFORM=mysql
+      - MYSQL_SERVICE_HOST=mysql
+      - MYSQL_SERVICE_PORT=3306
+      - MYSQL_SERVICE_DB_NAME=nacos
+      - MYSQL_SERVICE_USER=root
+      - MYSQL_SERVICE_PASSWORD=rw123
+    volumes:
+      - ./nacos/logs:/home/nacos/logs
+      - ./nacos/conf/application.properties:/home/nacos/conf/application.properties
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9849:9849"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:8.0
+    container_name: mall4cloud-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_ROOT_PASSWORD=rw123
+      - MYSQL_DATABASE=nacos
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+      - ./mysql/conf/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql/logs:/var/log/mysql
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:6.2
+    container_name: mall4cloud-redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./redis/data:/data
+      - ./redis/conf/redis.conf:/usr/local/etc/redis/redis.conf
+    ports:
+      - "6379:6379"
+
+  seata:
+    image: registry.cn-hongkong.aliyuncs.com/mall4j-images/seata-server:2.0.0
+    container_name: mall4cloud-seata
+    environment:
+      - SEATA_CONFIG_NAME=file:/root/seata-config/registry
+    volumes:
+      - ./seata/config/registry.conf:/root/seata-config/registry.conf
+    ports:
+      - "8091:8091"
+    depends_on:
+      - nacos
+
+  minio:
+    image: minio/minio:RELEASE.2023-07-21T21-12-44Z
+    container_name: mall4cloud-minio
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin
+    volumes:
+      - ./minio/data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9001"
+
+  # 业务服务
+  gateway:
+    build:
+      context: ./mall4cloud-gateway
+      dockerfile: Dockerfile
+    container_name: mall4cloud-gateway
+    environment:
+      - NACOS_HOST=nacos
+      - NACOS_PORT=8848
+      - SPRING_PROFILES_ACTIVE=prod
+      - JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9000:9000"
+    depends_on:
+      - nacos
+      - redis
+
+  auth:
+    build:
+      context: ./mall4cloud-auth
+      dockerfile: Dockerfile
+    container_name: mall4cloud-auth
+    environment:
+      - NACOS_HOST=nacos
+      - NACOS_PORT=8848
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=mall4cloud_auth
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=rw123
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SPRING_PROFILES_ACTIVE=prod
+      - JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9002:9000"
+    depends_on:
+      - nacos
+      - mysql
+      - redis
+
+  user:
+    build:
+      context: ./mall4cloud-user
+      dockerfile: Dockerfile
+    container_name: mall4cloud-user
+    environment:
+      - NACOS_HOST=nacos
+      - NACOS_PORT=8848
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=mall4cloud_user
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=rw123
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SEATA_HOST=seata
+      - SEATA_PORT=8091
+      - SPRING_PROFILES_ACTIVE=prod
+      - JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9004:9000"
+    depends_on:
+      - nacos
+      - mysql
+      - redis
+      - seata
+
+  biz:
+    build:
+      context: ./mall4cloud-biz
+      dockerfile: Dockerfile
+    container_name: mall4cloud-biz
+    environment:
+      - NACOS_HOST=nacos
+      - NACOS_PORT=8848
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=mall4cloud_biz
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=rw123
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SEATA_HOST=seata
+      - SEATA_PORT=8091
+      - SPRING_PROFILES_ACTIVE=prod
+      - JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9003:9000"
+    depends_on:
+      - nacos
+      - mysql
+      - redis
+      - seata
+      - minio
+
+  platform:
+    build:
+      context: ./mall4cloud-platform
+      dockerfile: Dockerfile
+    container_name: mall4cloud-platform
+    environment:
+      - NACOS_HOST=nacos
+      - NACOS_PORT=8848
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - MYSQL_DATABASE=mall4cloud_platform
+      - MYSQL_USERNAME=root
+      - MYSQL_PASSWORD=rw123
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SEATA_HOST=seata
+      - SEATA_PORT=8091
+      - SPRING_PROFILES_ACTIVE=prod
+      - JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9005:9000"
+    depends_on:
+      - nacos
+      - mysql
+      - redis
+      - seata 
