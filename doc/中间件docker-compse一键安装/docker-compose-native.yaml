@@ -6,10 +6,9 @@ services:
     container_name: mall4cloud-mysql
     restart: always
     environment:
-      - MYSQL_ROOT_PASSWORD=80jpnH4.r5g
-    network_mode: "host"
-    expose:
-      - 3306
+      - MYSQL_ROOT_PASSWORD=rw123
+    ports:
+      - "3306:3306"
     volumes:
       - ./mysql/data:/var/lib/mysql
       - ./mysql/conf.d:/etc/mysql/conf.d
@@ -20,23 +19,22 @@ services:
     container_name: mall4cloud-minio
     restart: always
     command: server /data
-    network_mode: "host"
-    expose:
-      - 9000
-      - 9001
+    ports:
+      - "9000:9000"
+      - "9001:9001"
     volumes:
       - ./minio/data:/data
     environment:
       - MINIO_ROOT_USER=admin
-      - MINIO_ROOT_PASSWORD=80jpnH4.r5g
-      - MINIO_BROWSER_REDIRECT_URL=http://192.168.1.46:9001
+      - MINIO_ROOT_PASSWORD=rw123
+      - MINIO_BROWSER_REDIRECT_URL=http://192.168.3.13:9001
 
   mall4cloud-redis:
     image: redis:7.0
     container_name: mall4cloud-redis
     restart: always
     network_mode: "host"
-    command: redis-server --requirepass 80jpnH4.r5g
+    command: redis-server --requirepass rw123
     expose:
       - 6379
 
@@ -47,21 +45,20 @@ services:
     restart: always
     depends_on:
       - mall4cloud-mysql
-    network_mode: "host"
-    expose:
-      - 8848
-      - 9848
-      - 9849
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9849:9849"
     environment:
       - JVM_XMS=256m
       - JVM_XMX=256m
       - MODE=standalone
       - PREFER_HOST_MODE=hostname
       - SPRING_DATASOURCE_PLATFORM=mysql
-      - MYSQL_SERVICE_HOST=192.168.1.46
+      - MYSQL_SERVICE_HOST=192.168.3.13
       - MYSQL_SERVICE_DB_NAME=mall4cloud_nacos
       - MYSQL_SERVICE_USER=root
-      - MYSQL_SERVICE_PASSWORD=80jpnH4.r5g
+      - MYSQL_SERVICE_PASSWORD=rw123
       - NACOS_AUTH_ENABLE=true
       - NACOS_CORE_AUTH_PLUGIN_NACOS_TOKEN_SECRET_KEY=TWFsbDRqTWFsbDRjbG91ZE1hbGw0ak1hbGw0Y2xvdWRNYWxsNGpNYWxsNGNsb3Vk
       - NACOS_CORE_AUTH_SERVER_IDENTITY_KEY=mall4jmall4jmall4jmall4jmall4jmall4jmall4jmall4j
@@ -80,8 +77,9 @@ services:
     environment:
       - TZ
       - STORE_MODE=db
-      - SEATA_IP=192.168.1.46
+      - SEATA_IP=192.168.3.13
       - SEATA_PORT=8091
+      - SEATA_CONFIG_PASSWORD=rw123
     volumes:
       - ./seata/application.yml:/seata-server/resources/application.yml
 
@@ -97,7 +95,7 @@ services:
       - discovery.type=single-node
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
       - ELASTICSEARCH_USERNAME=elastic
-      - ELASTIC_PASSWORD=80jpnH4.r5g
+      - ELASTIC_PASSWORD=rw123
       - xpack.security.enabled=true
     volumes:
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
@@ -145,7 +143,7 @@ services:
       - ./rocketmq/broker/conf/broker.conf:/etc/rocketmq/broker.conf
     environment:
       JAVA_OPT_EXT: "-Duser.home=/home/rocketmq -Xms512M -Xmx512M -Xmn128M -XX:-AssumeMP"
-    command: ["sh","mqbroker","-c","/etc/rocketmq/broker.conf","-n","192.168.1.46:9876","autoCreateTopicEnable=true"]
+    command: ["sh","mqbroker","-c","/etc/rocketmq/broker.conf","-n","192.168.3.13:9876","autoCreateTopicEnable=true"]
     depends_on:
       - mall4cloud-rocketmq-namesrv
 
@@ -157,6 +155,6 @@ services:
     ports:
       - 8180:8080
     environment:
-      JAVA_OPTS: "-Drocketmq.namesrv.addr=192.168.1.46:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
+      JAVA_OPTS: "-Drocketmq.namesrv.addr=192.168.3.13:9876 -Dcom.rocketmq.sendMessageWithVIPChannel=false"
     depends_on:
       - mall4cloud-rocketmq-namesrv
