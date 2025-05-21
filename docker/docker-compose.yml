@@ -1,0 +1,198 @@
+version: '3.8'
+
+services:
+  # 微服务
+  gateway:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.template
+    container_name: gateway
+    environment:
+      - JAR_FILE=mall4cloud-gateway.jar
+      - PORT=9000
+    ports:
+      - "9000:9000"
+    # depends_on:
+    #   - nacos
+    #   - redis
+    networks:
+      - mall4cloud-net
+
+  auth:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.template
+    container_name: auth
+    environment:
+      - JAR_FILE=mall4cloud-auth.jar
+      - PORT=9001
+    ports:
+      - "9001:9001"
+    # depends_on:
+    #   - nacos
+    #   - mysql
+    #   - redis
+    networks:
+      - mall4cloud-net
+
+  rbac:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.template
+    container_name: rbac
+    environment:
+      - JAR_FILE=mall4cloud-rbac.jar
+      - PORT=9002
+    ports:
+      - "9002:9002"
+    # depends_on:
+    #   - nacos
+    #   - mysql
+    #   - redis
+    networks:
+      - mall4cloud-net
+
+  biz:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.template
+    container_name: biz
+    environment:
+      - JAR_FILE=mall4cloud-biz.jar
+      - PORT=9003
+    ports:
+      - "9003:9003"
+    # depends_on:
+    #   - nacos
+    #   - mysql
+    #   - redis
+    #   - seata
+    networks:
+      - mall4cloud-net
+
+  product:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.template
+    container_name: product
+    environment:
+      - JAR_FILE=mall4cloud-product.jar
+      - PORT=9004
+    ports:
+      - "9004:9004"
+    # depends_on:
+    #   - nacos
+    #   - mysql
+    #   - redis
+    #   - seata
+    networks:
+      - mall4cloud-net
+
+  order:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.template
+    container_name: order
+    environment:
+      - JAR_FILE=mall4cloud-order.jar
+      - PORT=9005
+    ports:
+      - "9005:9005"
+    # depends_on:
+    #   - nacos
+    #   - mysql
+    #   - redis
+    #   - seata
+    networks:
+      - mall4cloud-net
+
+  user:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.template
+    container_name: user
+    environment:
+      - JAR_FILE=mall4cloud-user.jar
+      - PORT=9006
+    ports:
+      - "9006:9006"
+    # depends_on:
+    #   - nacos
+    #   - mysql
+    #   - redis
+    networks:
+      - mall4cloud-net
+
+  search:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.template
+    container_name: search
+    environment:
+      - JAR_FILE=mall4cloud-search.jar
+      - PORT=9007
+    ports:
+      - "9007:9007"
+    # depends_on:
+    #   - nacos
+    #   - mysql
+    #   - redis
+    #   - elasticsearch
+    networks:
+      - mall4cloud-net
+
+  multishop:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.template
+    container_name: multishop
+    environment:
+      - JAR_FILE=mall4cloud-multishop.jar
+      - PORT=9008
+    ports:
+      - "9008:9008"
+    # depends_on:
+    #   - nacos
+    #   - mysql
+    #   - redis
+    networks:
+      - mall4cloud-net
+
+  platform:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.template
+    container_name: platform
+    environment:
+      - JAR_FILE=mall4cloud-platform.jar
+      - PORT=9009
+    ports:
+      - "9009:9009"
+    # depends_on:
+    #   - nacos
+    #   - mysql
+    #   - redis
+    networks:
+      - mall4cloud-net
+
+  payment:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.template
+    container_name: payment
+    environment:
+      - JAR_FILE=mall4cloud-payment.jar
+      - PORT=9010
+    ports:
+      - "9010:9010"
+    # depends_on:
+    #   - nacos
+    #   - mysql
+    #   - redis
+    #   - seata
+    networks:
+      - mall4cloud-net
+
+networks:
+  mall4cloud-net:
+    driver: bridge 

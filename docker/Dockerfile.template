@@ -1,0 +1,11 @@
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+COPY ${JAR_FILE} app.jar
+
+ENV TZ=Asia/Shanghai
+
+EXPOSE ${PORT}
+
+ENTRYPOINT ["java", "-jar", "app.jar"] 

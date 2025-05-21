@@ -65,7 +65,7 @@ package-lock.json
 
 ### Docker ###
 docker-compose-prod.yml
-docker-compose.yml
+# docker-compose.yml
 
 ### Database ###
 mysql/
