@@ -80,3 +80,4 @@ rocketmq/
 *.swp
 *.properties~
 *.xml~
+doc/中间件docker-compse一键安装/minio/data/.minio.sys/
