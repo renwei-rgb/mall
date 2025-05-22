@@ -9,9 +9,9 @@ services:
     container_name: gateway
     environment:
       - JAR_FILE=mall4cloud-gateway.jar
-      - PORT=9000
+      - PORT=9020
     ports:
-      - "9000:9000"
+      - "9020:9020"
     # depends_on:
     #   - nacos
     #   - redis
@@ -25,9 +25,9 @@ services:
     container_name: auth
     environment:
       - JAR_FILE=mall4cloud-auth.jar
-      - PORT=9001
+      - PORT=9011
     ports:
-      - "9001:9001"
+      - "9011:9011"
     # depends_on:
     #   - nacos
     #   - mysql

@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mall4cloud-frontend
+    ports:
+      - "8080:80"
+    networks:
+      - mall4cloud-net
+
+networks:
+  mall4cloud-net:
+    external: true 

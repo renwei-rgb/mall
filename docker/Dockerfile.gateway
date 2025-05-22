@@ -1,0 +1,6 @@
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+COPY mall4cloud-gateway.jar app.jar
+ENV TZ=Asia/Shanghai
+EXPOSE 9020
+ENTRYPOINT [" java\, \-jar\, \app.jar\]
