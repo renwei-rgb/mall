@@ -1,0 +1,1 @@
+import{s as r}from"./index-6f2da097.js";function t(e){return r({url:"/mall4cloud_search/p/search/page",method:"get",params:e})}function d(e){return r({url:"/mall4cloud_product/admin/spu",method:"delete",params:{spuId:e}})}export{d,t as p};

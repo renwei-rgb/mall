@@ -1,0 +1,1 @@
+const e=/1[0-9]{10}/,r=/^(?!\d+$)[a-zA-Z0-9_]{4,16}$/,s=/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/;function c(n){return u(n)||E(n)||o(n)}function E(n){return t(e,n)}function o(n){return t(r,n)}function u(n){return t(s,n)}function t(n,i){return i?n.test(i):!1}export{r as U,c as v};

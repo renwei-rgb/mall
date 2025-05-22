@@ -1,0 +1,1 @@
+import{u as o,b as p}from"./vue-router@4.5.1_vue@3.5.14-0f6ed4bc.js";import"./@vue_reactivity@3.5.14-2213b677.js";import"./@vue_shared@3.5.14-94c2c668.js";import"./@vue_runtime-core@3.5.14-81aa8ddd.js";const i={__name:"index",setup(s){const{params:t,query:e}=o(),{path:r}=t;return p().replace({path:`/${r}`,query:e}),()=>{}}};export{i as default};
