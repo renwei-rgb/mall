@@ -1,0 +1,38 @@
+{
+  "mappings": {
+    "properties": {
+      "attrs": {
+        "type": "nested",
+        "properties": {
+          "attrId": { "type": "long" },
+          "attrName": { "type": "keyword" },
+          "attrValue": { "type": "keyword" }
+        }
+      },
+      "tags": {
+        "type": "keyword"
+      },
+      "brandId": { "type": "long" },
+      "categoryId": { "type": "long" },
+      "code": { "type": "keyword" },
+      "name": {
+        "type": "text",
+        "analyzer": "ik_max_word",
+        "search_analyzer": "ik_smart"
+      },
+      "priceFee": { "type": "double" },
+      "stock": { "type": "integer" },
+      "publishStatus": { "type": "integer" },
+      "picUrl": { "type": "keyword" },
+      "saleNum": { "type": "integer" },
+      "sort": { "type": "integer" },
+      "spuId": { "type": "long" },
+      "storeId": { "type": "long" },
+      "subTitle": {
+        "type": "text",
+        "analyzer": "ik_max_word",
+        "search_analyzer": "ik_smart"
+      }
+    }
+  }
+} 
